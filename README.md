@@ -2,12 +2,18 @@
 
 ## Yugabyte recovery after cluster outage
 
-The logs tserver-logs.zip show how yuagbyte restarts a couple of times before recovering from a full outage.
+The logs logs.tar.gz show how yuagbyte restarts a couple of times before recovering from a full outage.
+The tserver folders contain each a splitted tar.gz file of the tablet servers data.
+The data is split into 100 MB chunks which can be put together to a tar.gz file using `cat tserver-X/* > tserver-X.tar.gz`.
+
+It seems that the restarts happen only if encryption at rest is enabled and the flags `durable_wal_write` and `require_durable_wal` are set to true.
+
+The encryption key id is yb-key-1674114520 and the file yb-key-1674114520.base64 contains the base64 encoded key.
+
 The cluster outage was simulated by killing all tablet servers at the same time.
 The following logs show how yugabyte recovers from the outage.
 Multiple restarts of the tablet servers are needed until the tablet servers fully recover.
 
-It seems that the restarts happen only when encryption at rest is enabled and the flags `durable_wal_write` and `require_durable_wal` are set to true.
 
 ### To reproduce this scenario
 
